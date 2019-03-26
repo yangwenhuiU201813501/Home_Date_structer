@@ -1,0 +1,129 @@
+
+题目：约瑟夫环问题
+班级：电信1809
+姓名：杨文晖
+学号：U201813501
+日期：2019.3.25
+
+
+1.需求分析
+（1）.输入两个正整数（int型）分别代表初始密码和参与的总人数；
+（2）.输出出序列的人的序号（int型）；
+（3）.解决约瑟夫（Joseph）环问题；
+（4）.第一组   输入  m  n   20   7
+                    密码：3 1 7 2 4 8 4
+               输出  6 1 4  7 2 3 5
+      第二组   输入  m  n   5    9
+                    密码：1 2 3 4 5 6 7 8 9
+               输出  5 1 2 4 9 3 8 7 6
+      第三组   输入  m  n   5    10
+                    密码：1 3 5 7 9 2 4 6 8 10
+               输出  5 4 2 7 1 3 6 9 8 10
+      第四组（ERROR）输入   m  n 5 7
+                     密码：1 5 2 -2 3 7 9
+                     输出：5 1 2 3 6 7 4
+2.概要设计
+    首先创建一个结构，包含序号,密码以及指针，调用CreatLinkList函数创建循环链表，然后
+   调用InputPassword函数输入密码，最后开始循环，找到出队的人然后free掉这个节点。
+    main函数依次调用以上三个函数，最终打印每次出队的人的序号。
+
+3.详细设计
+#include <stdio.h>
+#include <stdlib.h>
+#include <malloc.h>
+int CreatLinkList(int n);
+int InputPassword(int n);
+int OutputLinkList(int m,int n);
+
+typedef struct LNode
+{
+    int number,password;
+    struct LNode*next;
+}List;
+struct LNode *head,*p,*pt;
+int CreatLinkList(int n)
+{
+    int i;
+    head=(struct LNode*)malloc(sizeof(List));
+    p=head;
+    for(i=1;i<n;i++)
+    {
+        pt=(struct LNode*)malloc(sizeof(List));
+        p->next=pt;
+        p=pt;
+    }
+    p->next=head;
+    pt=head;
+    return 0;
+}
+int InputPassword(int n)
+{
+    int i,j;
+    printf("\n请依次输入密码:\n");
+    for(i=1;i<=n;i++)
+    {
+        scanf("%d",&j);
+        pt->number=i;
+        pt->password=j;
+        pt=pt->next;
+    }
+    pt=p;
+    return 0;
+}
+int OutputLinkList(int m,int n)
+{
+    int i,j;
+    for(i=1;i<=n;i++)
+    {
+        for(j=1;j<m;j++)
+        {
+            pt=pt->next;
+        }
+        p=pt->next;
+        m=p->password;
+        printf("%d\t",p->number);
+        pt->next=p->next;
+        free(p);
+    }
+    return 0;
+}
+void main()
+{
+    int m,n;
+
+    printf("请输入初始密码m和总人数n:\n");
+    scanf("%d%d",&m,&n);
+
+    CreatLinkList(n);
+    InputPassword(n);
+    printf("\n出列的序号依次是: \n");
+    OutputLinkList(m,n);
+    return 0;
+}
+
+
+4.调试分析
+       （1）.创建的循环链表包含头节点，增加了程序复杂度；没有单独考虑最后剩下一个人的情况；
+       （2）.算法的时间复杂度分析CreateLinkList函数时间复杂度为 O(n),InputPassword函数时间复杂度为 O(n),
+             OutList函数时间复杂度为 O(n^2);
+5.用户使用说明
+      （1）.运行程序后提示输入初始密码以及人数，按下“Enter”键继续；
+      （2）.分别输入每个人的密码；
+      （3）.程序输出出队顺序。
+
+6.测试结果
+       第一组   输入  m  n   20   7
+                    密码：3 1 7 2 4 8 4
+               输出  6 1 4  7 2 3 5
+      第二组   输入  m  n   5    9
+                    密码：1 2 3 4 5 6 7 8 9
+               输出  5 1 2 4 9 3 8 7 6
+      第三组   输入  m  n   5    10
+                    密码：1 3 5 7 9 2 4 6 8 10
+               输出  5 4 2 7 1 3 6 9 8 10
+      第四组（ERROR）输入   m  n 5 7
+                     密码：1 5 2 -2 3 7 9
+                     输出：5 1 2 3 6 7 4
+
+7.附录
+    
