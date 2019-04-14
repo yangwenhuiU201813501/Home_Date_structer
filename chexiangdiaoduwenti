@@ -1,0 +1,81 @@
+#include<stdio.h>
+#include<stdlib.h>
+#define Maxlen 100
+
+struct snode
+{
+    int data[Maxlen];
+    int top;
+}s;
+
+int n;
+
+void Initstack()
+{
+    s.top=-1;
+}
+
+void Push(int q)
+{
+    s.top++;
+    s.data[s.top]=q;
+}
+
+int Pop()
+{
+    int temp;
+    temp=s.data[s.top];
+    s.top--;
+    return temp;
+}
+
+int EmptyStack()
+{
+    if(s.top==-1)
+        return 1;
+    else
+        return 0;
+}
+
+void Process(int position,int path[],int current)
+{
+     int m,i;
+     if(position<n)
+     {
+         Push(position+1);
+         Process(position+1,path,current);
+         Pop();
+     }
+
+     if(!EmptyStack())
+     {
+         m=Pop();
+         path[current]=m;
+         current++;
+         Process(position,path,current);
+         Push(m);
+     }
+
+     if(position==n&&EmptyStack())
+     {
+         for(i=0;i<current;i++)
+         {
+             printf("%d",path[i]);
+         }
+         printf("\n");
+     }
+
+}
+
+void main()
+{
+    int path[Maxlen];
+    printf("输入要调度车厢总数:");
+    scanf("%d",&n);
+    Initstack();
+    Push(1);
+    printf("所有输出序列:\n");
+    Process(1,path,0);
+}
+
+
