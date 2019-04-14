@@ -1,0 +1,124 @@
+题目：车厢调度问题实现
+班级：电信1809
+姓名：杨文晖
+学号：U201813501
+日期：2019.4.8
+
+1.需求分析
+ （1）.问题：假设停在铁路调度站入口处的车厢序列的编号依次为1,2,3，...，n。设计一个程序，求出所有
+可能由此输出的长度为n 的车厢序列。
+ （2）.输入int 型整数（较小一点）代表车厢数；
+ （3）.输出可能的序列，int 类型，序列总数为Catalan数；
+ （4）.完成车厢可能的序列；
+ （5）.     a).输入1        输出1
+                b).输入2       输出  21 
+                                             12
+                c).输入3         输出 321
+                                              231
+                                              213
+                                              132
+                                              123
+                d).输入 4        输出  4321
+                                               3421
+                                               3241
+                                               3214
+                                               2431
+                                               2341
+                                               2314
+                                               2143
+                                               2134
+                                               1432
+                                               1342
+                                               1324
+                                               1243
+                                               1234
+2.概要设计
+         首先创建一个栈，然后依次进栈，依次出栈，打印序列。
+3.详细设计
+#include<stdio.h>
+#include<stdlib.h>
+#define Maxlen 100
+
+struct snode
+{
+    int data[Maxlen];
+    int top;
+}s;
+
+int n;
+
+void Initstack()
+{
+    s.top=-1;
+}
+
+void Push(int q)
+{
+    s.top++;
+    s.data[s.top]=q;
+}
+
+int Pop()
+{
+    int temp;
+    temp=s.data[s.top];
+    s.top--;
+    return temp;
+}
+
+int EmptyStack()
+{
+    if(s.top==-1)
+        return 1;
+    else
+        return 0;
+}
+
+void Process(int position,int path[],int current)
+{
+     int m,i;
+     if(position<n)
+     {
+         Push(position+1);
+         Process(position+1,path,current);
+         Pop();
+     }
+
+     if(!EmptyStack())
+     {
+         m=Pop();
+         path[current]=m;
+         current++;
+         Process(position,path,current);
+         Push(m);
+     }
+
+     if(position==n&&EmptyStack())
+     {
+         for(i=0;i<current;i++)
+         {
+             printf("%d",path[i]);
+         }
+         printf("\n");
+     }
+
+}
+
+void main()
+{
+    int path[Maxlen];
+    printf("输入要调度车厢总数:");
+    scanf("%d",&n);
+    Initstack();
+    Push(1);
+    printf("所有输出序列:\n");
+    Process(1,path,0);
+}
+
+4.调试分析
+   1).时间复杂度分析  O(m*n^n)
+   2).程序输入值超过10之后就跑不完了，序列过多；
+   3).可以考虑加入total函数统计序列总数；
+
+
+
